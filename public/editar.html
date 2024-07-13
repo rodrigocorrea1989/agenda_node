@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css" integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N" crossorigin="anonymous">
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-Fy6S3B9q64WdZWQUiU+q4/2Lc9npb8tCaSX9FK7E8HnRr0Jz8D6OP9dO5Vg3Q9ct" crossorigin="anonymous"></script>
+    <title>Agenda</title>
+</head>
+<nav class="navbar navbar-dark bg-dark">
+  <a class="navbar-brand" href="#">
+        CRUD AGENDA node.js
+  </a>
+</nav>
+<body>
+    <div class="container col-md-4 mt-5">
+        <h1 class="text-primary">Editar Con Node</h1>
+        <a href="/clientes.html" class="btn btn-primary">Mostrar todos los clientes</a>
+        <form class="mt-5" id="updateClienteForm"  method="post" action="/actualizar?_method=PUT">
+            <div class="form-group row">
+                <label for="inputPassword" class="col-sm-2 col-form-label">Nombre</label>
+                <div class="col-sm-10">
+                  <input type="text" class="form-control text-danger" name="nombre" id="nombre" required>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="inputPassword" class="col-sm-2 col-form-label">Apellido</label>
+                <div class="col-sm-10">
+                  <input type="text" class="form-control text-danger" name="apellido" id="apellido" required>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="inputPassword" class="col-sm-2 col-form-label">Dirección</label>
+                <div class="col-sm-10">
+                  <input type="text" class="form-control text-danger" name="direccion" id="direccion" required>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="inputPassword"  class="col-sm-2 col-form-label">Teléfono</label>
+                <div class="col-sm-10">
+                  <input type="text" class="form-control text-danger" name="telefono" id="telefono" required>
+            </div>
+            </div>  
+            <div class="form-group row">
+                <label for="inputPassword" class="col-sm-2 col-form-label">Email</label>
+                <div class="col-sm-10">
+                  <input type="email" class="form-control text-danger" name="email" id="email" required>
+            </div>
+            </div>
+            <input type="hidden" class="form-control text-danger" name="id" id="id" required>
+            <input type="submit" value="Guardar" class="btn btn-primary">
+            
+          </form>
+    </div>
+    <script>
+            let urlString = window.location.search;
+            let urlParams = new URLSearchParams(urlString);
+            let id = urlParams.get('id');
+            console.log(id);
+
+        fetch(`/editar?id=${id}`)
+          .then(response => response.json())
+          .then(data => {
+            data.forEach((cliente) => {
+
+               var nombre=document.getElementById('nombre').value=cliente.nombre;
+               var apellido=document.getElementById('apellido').value=cliente.apellido;
+               var direccion=document.getElementById('direccion').value=cliente.direccion;  
+               var telefono=document.getElementById('telefono').value=cliente.telefono; 
+               var email=document.getElementById('email').value=cliente.email;
+               var id=document.getElementById('id').value=cliente.id;
+            });
+          })
+          .catch(error => console.error('Error al obtener clientes:', error));
+          console.log(error);
+
+
+            document.getElementById('updateClienteForm').addEventListener('submit', function(event) {
+              event.preventDefault();
+
+              const id = document.getElementById('id').value;
+              const nombre = document.getElementById('nombre').value;
+              const apellido = document.getElementById('apellido').value;
+              const direccion = document.getElementById('direccion').value;
+              const telefono = document.getElementById('telefono').value;
+              const email = document.getElementById('email').value;
+
+              const data = { id, nombre, apellido, direccion, telefono, email };
+
+              fetch(`/actualizar`, {
+                method: 'PUT',
+                headers: {
+                  'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data)
+              })
+              .then(response => {
+                if (!response.ok) {
+                  throw new Error('Error al actualizar el cliente');
+                }
+                return response.json();
+              })
+              .then(data => {
+                alert(data.message); // Salida esperada: "Cliente actualizado exitosamente"
+              })
+              .catch(error => console.error('Error:', error));
+            });
+    </script>
+</body>
+</html>

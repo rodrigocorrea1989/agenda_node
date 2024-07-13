@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css" integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N" crossorigin="anonymous">
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-Fy6S3B9q64WdZWQUiU+q4/2Lc9npb8tCaSX9FK7E8HnRr0Jz8D6OP9dO5Vg3Q9ct" crossorigin="anonymous"></script>
+    <title>Clientes</title>
+</head>
+<!-- Image and text -->
+<nav class="navbar navbar-dark bg-dark">
+  <a class="navbar-brand" href="#">
+        CRUD AGENDA node.js
+  </a>
+</nav>
+<body>
+    <div class="container mt-5">
+    <h1 class="text-primary">Mostrar clientes con node</h1>
+    <a class="btn btn-primary" href="index.html">Volver</a>
+    <table class="table table-dark mt-5">
+        <thead>
+          <tr>
+            <th scope="col">#</th>
+            <th scope="col">Nombre</th>
+            <th scope="col">Apellido</th>
+            <th scope="col">Dirección</th>
+            <th scope="col">Teléfono</th>
+            <th scope="col">Email</th>
+          </tr>
+        </thead>
+        <tbody id="clientesTableBody">
+          <!-- Aquí se agregarán dinámicamente los registros de clientes -->
+        </tbody>
+      </table>
+    <script>
+        // Aquí puedes agregar scripts JavaScript para manejar la respuesta del servidor
+        fetch('/clientes')
+          .then(response => response.json())
+          .then(data => {
+            const tableBody = document.getElementById('clientesTableBody');
+            data.forEach((cliente, index) => {
+              const row = `
+                <tr>
+                  <th scope="row">${index + 1}</th>
+                  <td>${cliente.nombre}</td>
+                  <td>${cliente.apellido}</td>
+                  <td>${cliente.direccion}</td>
+                  <td>${cliente.telefono}</td>
+                  <td>${cliente.email}</td>
+                   <td><a class="btn btn-success" href="editar.html?id=${cliente.id}">Editar</a></td>
+                   <td><a class="btn btn-danger" href="eliminar?id=${cliente.id}" >Eliminar</a></td>
+                </tr>
+              `;
+              tableBody.innerHTML += row;
+            });
+          })
+          .catch(error => console.error('Error al obtener clientes:', error));
+      </script>
+    </div>
+</body>
+</html>
